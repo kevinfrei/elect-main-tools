@@ -5,7 +5,6 @@
     "node": true
   },
   "extends": [
-    "react-app",
     "plugin:@typescript-eslint/recommended",
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
@@ -15,7 +14,7 @@
     "project": "tsconfig.json",
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "react", "react-hooks"],
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/array-type": [
@@ -172,16 +171,6 @@
     "prefer-const": "warn",
     "quote-props": "off",
     "radix": "error",
-    "react/jsx-curly-spacing": "off",
-    "react/jsx-equals-spacing": "off",
-    "react/jsx-wrap-multilines": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": [
-      "warn",
-      {
-        "additionalHooks": "useRecoilCallback"
-      }
-    ],
     "space-before-function-paren": "off",
     "space-in-parens": ["off", "never"],
     "spaced-comment": [

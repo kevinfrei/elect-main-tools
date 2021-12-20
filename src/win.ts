@@ -5,6 +5,7 @@ import { LoadWindowPos, SaveWindowPos, WindowPosition } from './persist';
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null = null;
+
 export function getMainWindow(): BrowserWindow | null {
   return mainWindow;
 }
@@ -16,12 +17,12 @@ const windowPos: WindowPosition = LoadWindowPos();
 // the window position to disk
 const windowPosUpdated = DebouncedEvery(() => {
   // Get the window state & save it
-  const mainWindow = getMainWindow();
-  if (mainWindow) {
-    windowPos.isMaximized = mainWindow.isMaximized();
+  const mw = getMainWindow();
+  if (mw) {
+    windowPos.isMaximized = mw.isMaximized();
     if (!windowPos.isMaximized) {
       // only update bounds if the window isn’t currently maximized
-      windowPos.bounds = mainWindow.getBounds();
+      windowPos.bounds = mw.getBounds();
     }
     SaveWindowPos(windowPos);
   }
