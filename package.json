@@ -5,8 +5,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "jest --config jest.jsdom.js",
-    "watch": "jest --config jest.jsdom.js --watch",
+    "test": "jest --config jestconfig.json --passWithNoTests",
+    "watch": "jest --config jestconfig.json --watch --passWithNoTests",
     "clean": "rimraf lib && rimraf \".tsbuildinfo\"",
     "build": "tsc --project tsconfig.json",
     "cleanbuild": "yarn clean && yarn build",
