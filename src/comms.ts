@@ -4,21 +4,23 @@ import { IpcMainInvokeEvent } from 'electron/main';
 import { Persistence } from './persist';
 import { getMainWindow } from './win';
 
-export type FileResponse = string | ProtocolResponse;
-export type BufferResponse = Buffer | ProtocolResponse;
-
 const log = MakeLogger('emt-comms-log');
 const err = MakeError('emt-comms-err');
 
+/**
+ * The type of a "channel handler", used by {@link registerChannel}
+ */
 export type Handler<R, T> = (arg: T) => Promise<R | void>;
 
 /**
- * Registers with `ipcMain.handle` a function that takes a mandatory parameter
- * and returns *string* data untouched. It also requires a checker to ensure the
- * data is properly typed
- * @param  {string} key - The id to register a listener for
- * @param  {TypeHandler<T>} handler - the function that handles the data
- * @param  {(v:any)=>v is T} checker - a Type Check function for type T
+ * Registers with electron's
+ * [ipcMain.handle](https://www.electronjs.org/docs/latest/api/ipc-main#ipcmainhandlechannel-listener)
+ * a function that takes a mandatory parameter and returns *string* data
+ * untouched. It also requires a checker to ensure the data is properly typed
+ *
+ * @param key The id to register a listener for
+ * @param handler the function that handles the data
+ * @param checker a Type Check function for return type of the channel T
  * @returns void
  */
 export function registerChannel<R, T>(
@@ -41,12 +43,12 @@ export function registerChannel<R, T>(
 
 /**
  * Read a value from persistence by name, returning it's unprocessed contents
+ * @async
  *
- * @async @function
- * @param {string} name - the name of the value to read
- * @return {Promise<string>} The raw string contents of the value
+ * @param name the name of the value to read
+ * @return Promise resolved to the raw string contents of the value
  */
-async function readFromStorage(name?: string): Promise<string> {
+export async function readFromStorage(name?: string): Promise<string> {
   if (!name) return '';
   try {
     log(`readFromStorage(${name})`);
@@ -63,11 +65,14 @@ async function readFromStorage(name?: string): Promise<string> {
 
 /**
  * Write a value to persistence by name.
+ * @async
  *
- * @async @function
- * @param {string?} keyValuePair - The key:value string to write
+ * @param keyValuePair - The key:value string to write
  */
-async function writeToStorage([key, value]: [string, string]): Promise<void> {
+export async function writeToStorage([key, value]: [
+  string,
+  string,
+]): Promise<void> {
   try {
     // First, split off the key name:
     log(`writeToStorage(${key} : ${value})`);
@@ -80,6 +85,12 @@ async function writeToStorage([key, value]: [string, string]): Promise<void> {
   }
 }
 
+/**
+ * Send arbitrary data to the main window
+ *
+ * @param channel The name of the channel
+ * @param data The arbitrary data to send
+ */
 export function SendToMain(channel: string, ...data: unknown[]): void {
   log('Sending to main:');
   const mainWindow = getMainWindow();
@@ -93,10 +104,10 @@ export function SendToMain(channel: string, ...data: unknown[]): void {
 }
 
 /**
- * Send a message to the rendering process
+ * Send a message to the main window. This pairs with Handle in the
+ * elect-render-utils library
  *
- * @param  {unknown} message
- * The (flattenable) message to send.
+ * @param message The (flattenable) message to send.
  */
 export function AsyncSend(message: unknown): void {
   SendToMain('async-data', { message });
@@ -106,6 +117,10 @@ function isKeyValue(obj: unknown): obj is [string, string] {
   return Type.is2TupleOf(obj, Type.isString, Type.isString);
 }
 
+/**
+ * Call this before starting your window. This will register handlers for
+ * the simple read-from/write-to storage calls that elect-render-utils expects
+ */
 export function SetupDefault(): void {
   // These are the general "just asking for something to read/written to disk"
   // functions. Media Info, Search, and MusicDB stuff needs a different handler
@@ -123,7 +138,17 @@ export type Registerer<T> = (
 ) => boolean;
 
 const e404 = { error: 404 };
-// Helper to check URL's & transition to async functions
+
+/**
+ * Helper to check URL's & transition to async functions
+ *
+ * @param type The 'header' of the protocol. "pix://foo/" for example
+ * @param registerer The type of protocol registration function to use.
+ * [protocol.registerBufferProtocol](https://www.electronjs.org/docs/latest/api/protocol#protocolregisterfileprotocolscheme-handler)
+ * for example. It must match the response type appropriately!
+ * @param processor The function that will process the protocol request
+ * @param defaultValue The (optional) default return value (Error 404)
+ */
 export function registerProtocolHandler<ResponseType>(
   type: string,
   registerer: Registerer<ResponseType>,
@@ -133,7 +158,7 @@ export function registerProtocolHandler<ResponseType>(
   ) => Promise<ProtocolResponse | ResponseType>,
   defaultValue: ProtocolResponse | ResponseType = e404,
 ) {
-  const protName = type.substr(0, type.indexOf(':'));
+  const protName = type.substring(0, type.indexOf(':'));
   log(`Protocol ${type} (${protName})`);
   const handler = async (req: ProtocolRequest) => {
     if (!req.url) {

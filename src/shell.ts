@@ -52,10 +52,24 @@ const openDialogOptionTypes: TypeCheckPair[] = [
   ['securityScopedBookmarks', Type.isBoolean],
 ];
 
+/**
+ * Type Check for
+ * [OpenDialogOptions](https://www.electronjs.org/docs/latest/api/dialog)
+ * @param obj The object to type check
+ * @returns True if obj is
+ * [OpenDialogOptions](https://www.electronjs.org/docs/latest/api/dialog)
+ */
 export function isOpenDialogOptions(obj: unknown): obj is OpenDialogOptions {
   return Type.isSpecificType(obj, openDialogOptionTypes);
 }
 
+/**
+ * Show an "Open" dialog, configured according to `options`
+ * @param options the
+ * [OpenDialogOptions](https://www.electronjs.org/docs/latest/api/dialog) used
+ * to show the dialog
+ * @returns the list of files/folders selected by the user
+ */
 export async function ShowOpenDialog(
   options: OpenDialogOptions,
 ): Promise<string[] | void> {
@@ -71,8 +85,9 @@ export async function ShowOpenDialog(
 }
 
 /**
- * Show a file in the shell
- * @param filePath - The path to the file to show
+ * Show a file or folder in the OS shell (Finder/Explorer/Linux whatever
+ * you call it)
+ * @param filePath - The path to the file or folder to show
  */
 export function showFile(filePath?: string): Promise<void> {
   return new Promise((resolve) => {

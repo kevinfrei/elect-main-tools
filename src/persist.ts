@@ -15,7 +15,12 @@ export type WindowPosition = {
   isMaximized: boolean;
 };
 
-// Here's a place for app settings & stuff...
+/**
+ * A
+ * [`persist`](https://github.com/kevinfrei/node-utils/blob/main/src/persist.ts)
+ * interface for the Electron app's persistent data location. It's a good place
+ * for app settings and the like.
+ */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const Persistence = MakePersistence(
   path.join(app.getPath('userData'), 'PersistedData'),
@@ -45,6 +50,11 @@ const defaultWindowPosition: WindowPosition = makeWindowPos(
   false,
 );
 
+/**
+ * Load the saved position of the window
+ *
+ * @returns The previous location of the window for the app
+ */
 export function LoadWindowPos(): WindowPosition {
   try {
     const tmp = Persistence.getItem('windowPosition');
@@ -76,10 +86,21 @@ export function LoadWindowPos(): WindowPosition {
   return defaultWindowPosition;
 }
 
+/**
+ * Save the window position for future use as a window-restore size
+ *
+ * @param st The window position to save
+ */
 export function SaveWindowPos(st: WindowPosition): void {
   Persistence.setItem('windowPosition', Pickle(st));
 }
 
+/**
+ * Translates a WindowPosition into a Rectangle for use elsewhere
+ *
+ * @param st The WindowPosition to translate
+ * @returns a rectangle which may or may not have and X and Y coordinate
+ */
 export function GetBrowserWindowPos(st: WindowPosition): Rectangle {
   if (
     st.bounds.x === Number.MIN_SAFE_INTEGER || // eslint-disable-line id-blacklist

@@ -1,3 +1,5 @@
+@freik/elect-main-utils / [Exports](modules.md)
+
 # @freik/elect-main-utils
 
 These are tools & utilities meant to be used in conjuction with my other

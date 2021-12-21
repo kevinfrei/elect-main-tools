@@ -6,6 +6,12 @@ import { LoadWindowPos, SaveWindowPos, WindowPosition } from './persist';
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null = null;
 
+/**
+ * Returns a reference to the main
+ * [BrowserWindow](https://www.electronjs.org/docs/latest/api/browser-window)
+ * (or null)
+ * @returns the main window handle (or null)
+ */
 export function getMainWindow(): BrowserWindow | null {
   return mainWindow;
 }
@@ -28,6 +34,13 @@ const windowPosUpdated = DebouncedEvery(() => {
   }
 }, 1000);
 
+/**
+ * Sets the main window and configures it to update the window position
+ * as well as clear the reference when it's closed
+ * @param win The
+ * [BrowserWindow](https://www.electronjs.org/docs/latest/api/browser-window)
+ * to consider the 'main' window
+ */
 export function setMainWindow(win: BrowserWindow) {
   const first = mainWindow === null;
   mainWindow = win;
