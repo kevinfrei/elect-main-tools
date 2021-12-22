@@ -1,7 +1,9 @@
 import { MakeError, MakeLogger, Type } from '@freik/core-utils';
 import { ipcMain, ProtocolRequest, ProtocolResponse } from 'electron';
+import isDev from 'electron-is-dev';
 import { IpcMainInvokeEvent } from 'electron/main';
 import { Persistence } from './persist';
+import { isOpenDialogOptions, ShowOpenDialog } from './shell';
 import { getMainWindow } from './win';
 
 const log = MakeLogger('emt-comms-log');
@@ -103,6 +105,10 @@ export function SendToMain(channel: string, ...data: unknown[]): void {
   }
 }
 
+async function wwwIsDev(): Promise<boolean> {
+  return Promise.resolve(isDev);
+}
+
 /**
  * Send a message to the main window. This pairs with Handle in the
  * elect-render-utils library
@@ -127,6 +133,8 @@ export function SetupDefault(): void {
   // because they don't just read/write to disk.
   registerChannel('read-from-storage', readFromStorage, Type.isString);
   registerChannel('write-to-storage', writeToStorage, isKeyValue);
+  registerChannel('show-open-dialog', ShowOpenDialog, isOpenDialogOptions);
+  registerChannel('is-dev', wwwIsDev, (a: unknown): a is void => true);
 }
 
 export type Registerer<T> = (

@@ -1,28 +1,27 @@
 {
   "name": "@freik/elect-main-utils",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Kevin Frei's Electron utilities for the Main process",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "jest --config jestconfig.json --passWithNoTests",
-    "watch": "jest --config jestconfig.json --watch --passWithNoTests",
-    "clean": "rimraf lib && rimraf \".tsbuildinfo\"",
+    "### Normal stuff ***": "Common stuff that you'll do all the time",
     "build": "tsc --project tsconfig.json",
+    "format": "prettier --write \"src/**/*.ts\" \"*.md\" \"*.json\" \".vscode/*.json\" \"docs/**/*.md\"",
+    "chk": "yarn format && yarn lint && yarn compile && yarn test",
+    "doc": "typedoc ./src/index.ts --tsconfig tsconfig.json && yarn format",
+    "test": "jest --config jestconfig.json --passWithNoTests",
+    "### Less common stuff ***": "Stuff you may not do very frequently",
+    "clean": "rimraf lib && rimraf \".tsbuildinfo\"",
+    "watch": "jest --config jestconfig.json --watch --passWithNoTests",
     "cleanbuild": "yarn clean && yarn build",
-    "debug": "rimraf lib && tsc -p tsdebug.json",
+    "lint": "yarn run eslint --fix --ext .ts src",
+    "compile": "tsc --noEmit -p tsconfig.json",
+    "### NPM lifecycle stuff ***": "",
     "prepare": "yarn run build",
     "postinstall": "husky install",
     "prepublishOnly": "yarn test && yarn run lint && pinst --disable",
-    "postpublish": "pinst --enable",
-    "format": "prettier --write \"src/**/*.ts\" \"*.md\" \"*.json\" \".vscode/*.json\" \"docs/**/*.md\"",
-    "lint": "yarn run eslint --fix --ext .ts src",
-    "preversion": "yarn run lint",
-    "version": "yarn run format && git add -A src",
-    "postversion": "git push && git push --tags --no-verify",
-    "compile": "tsc --noEmit -p tsconfig.json",
-    "chk": "yarn format && yarn lint && yarn compile && yarn test",
-    "doc": "typedoc ./src/index.ts --tsconfig tsconfig.json && yarn format"
+    "postpublish": "pinst --enable"
   },
   "repository": {
     "type": "git",
@@ -36,9 +35,12 @@
   "homepage": "https://github.com/kevinfrei/elect-main-utils#readme",
   "peerDependencies": {
     "@freik/core-utils": "^0.34.0",
-    "@freik/elect-render-utils": "^0.1.0",
-    "@freik/electron-renderer": "^0.1.0",
+    "@freik/elect-render-utils": "^0.1.2",
+    "@freik/electron-renderer": "^0.1.2",
     "@freik/node-utils": "^0.20.7",
+    "electron": "^16.0.5"
+  },
+  "dependencies": {
     "electron-is-dev": "^2.0.0"
   },
   "devDependencies": {
@@ -49,7 +51,6 @@
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
     "electron": "^16.0.5",
-    "electron-is-dev": "^2.0.0",
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",

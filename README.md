@@ -1,9 +1,11 @@
 # @freik/elect-main-utils
 
-These are tools & utilities meant to be used in conjuction with my other
-electron libraries for simplifying common stuff for Electron applications.
+These are tools & utilities for the Electron 'main' process, which is meant to
+be used in conjuction with my other electron libraries for simplifying common
+stuff for Electron applications.
 
-You can find the jsdoc documentation [here](docs/modules.md)
+You can find the documentation is [here](docs/modules.md) (it's currently only
+typedoc auto-generated API documentation)
 
 To use them, do this:
 
@@ -17,7 +19,7 @@ or
 npm install @freik/elect-main-utils @freik/elect-render-utils @freik/electron-renderer @freik/web-utils
 ```
 
-## The other 3 components live here:
+The other 3 components live here:
 
 | npm module                                                                     | description                                                                                                                                                  |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
