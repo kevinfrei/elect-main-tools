@@ -18,20 +18,28 @@ export function getMainWindow(): BrowserWindow | null {
 
 const windowPos: WindowPosition = LoadWindowPos();
 
-// This will get called after a 1 second delay (and subsequent callers will
-// not be registered if one is waiting) to not be so aggressive about saving
-// the window position to disk
-const windowPosUpdated = DebouncedEvery(() => {
-  // Get the window state & save it
-  const mw = getMainWindow();
+/**
+ * Try to read the currently main window position.
+ * @returns the main window position (or the most recently loaded/saved value)
+ */
+export function getWindowPos(win?: BrowserWindow): WindowPosition {
+  const mw = win || getMainWindow();
   if (mw) {
     windowPos.isMaximized = mw.isMaximized();
     if (!windowPos.isMaximized) {
       // only update bounds if the window isn’t currently maximized
       windowPos.bounds = mw.getBounds();
     }
-    SaveWindowPos(windowPos);
   }
+  return windowPos;
+}
+
+// This will get called after a 1 second delay (and subsequent callers will
+// not be registered if one is waiting) to not be so aggressive about saving
+// the window position to disk
+const windowPosUpdated = DebouncedEvery(() => {
+  // Get the window state & save it
+  SaveWindowPos(getWindowPos());
 }, 1000);
 
 /**

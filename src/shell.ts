@@ -78,10 +78,9 @@ export async function ShowOpenDialog(
     return;
   }
   const res = await dialog.showOpenDialog(mainWindow, options);
-  if (res.canceled) {
-    return;
+  if (!res.canceled) {
+    return res.filePaths;
   }
-  return res.filePaths;
 }
 
 /**
@@ -89,11 +88,9 @@ export async function ShowOpenDialog(
  * you call it)
  * @param filePath - The path to the file or folder to show
  */
-export function showFile(filePath?: string): Promise<void> {
-  return new Promise((resolve) => {
-    if (filePath) {
-      shell.showItemInFolder(filePath);
-    }
-    resolve();
-  });
+export async function ShowFile(filePath?: string): Promise<void> {
+  if (filePath) {
+    shell.showItemInFolder(filePath);
+  }
+  return Promise.resolve();
 }
