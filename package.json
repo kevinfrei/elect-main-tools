@@ -1,6 +1,6 @@
 {
   "name": "@freik/elect-main-utils",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Kevin Frei's Electron utilities for the Main process",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -38,7 +38,7 @@
     "@freik/elect-render-utils": "^0.1.2",
     "@freik/electron-renderer": "^0.1.2",
     "@freik/node-utils": "^0.21.0",
-    "electron": "^16.0.5"
+    "electron": "^16.0.8"
   },
   "dependencies": {
     "electron-is-dev": "^2.0.0"
