@@ -1,5 +1,11 @@
-import { Pickle, Type, Unpickle } from '@freik/core-utils';
 import { MakePersistence } from '@freik/node-utils';
+import { Pickle, Unpickle } from '@freik/typechk';
+import {
+  hasField,
+  hasFieldType,
+  isBoolean,
+  isNumber,
+} from '@freik/typechk/lib/esm/TypeChk';
 import { app, Rectangle } from 'electron';
 import path from 'path';
 
@@ -62,14 +68,14 @@ export function LoadWindowPos(): WindowPosition {
       return defaultWindowPosition;
     }
     const tmpws = Unpickle(tmp);
-    if (Type.has(tmpws, 'bounds')) {
+    if (hasField(tmpws, 'bounds')) {
       const { bounds } = tmpws;
       if (
-        Type.hasType(bounds, 'x', Type.isNumber) &&
-        Type.hasType(bounds, 'y', Type.isNumber) &&
-        Type.hasType(bounds, 'width', Type.isNumber) &&
-        Type.hasType(bounds, 'height', Type.isNumber) &&
-        Type.hasType(tmpws, 'isMaximized', Type.isBoolean)
+        hasFieldType(bounds, 'x', isNumber) &&
+        hasFieldType(bounds, 'y', isNumber) &&
+        hasFieldType(bounds, 'width', isNumber) &&
+        hasFieldType(bounds, 'height', isNumber) &&
+        hasFieldType(tmpws, 'isMaximized', isBoolean)
       ) {
         return makeWindowPos(
           bounds.x,

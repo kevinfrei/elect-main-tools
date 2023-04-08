@@ -1,11 +1,18 @@
-import { Type, TypeCheckPair } from '@freik/core-utils';
+import { hasStrField } from '@freik/typechk';
+import {
+  chkArrayOf,
+  hasFieldType,
+  isArrayOfString,
+  isBoolean,
+  isObjectOfType,
+  isString,
+} from '@freik/typechk/lib/esm/TypeChk';
 import { dialog, OpenDialogOptions, shell } from 'electron';
 import { getMainWindow } from './win';
 
 function isFileFilter(o: unknown): o is Electron.FileFilter {
   return (
-    Type.hasStr(o, 'name') &&
-    Type.hasType(o, 'extensions', Type.isArrayOfString)
+    hasStrField(o, 'name') && hasFieldType(o, 'extensions', isArrayOfString)
   );
 }
 
@@ -36,21 +43,15 @@ function isODOProperty(o: unknown): o is ODOProps {
   return false;
 }
 
-const openDialogOptionTypes: TypeCheckPair[] = [
-  ['title', Type.isString],
-  ['defaultPath', Type.isString],
-  ['buttonLabel', Type.isString],
-  [
-    'filters',
-    (o: unknown): o is Electron.FileFilter[] => Type.isArrayOf(o, isFileFilter),
-  ],
-  [
-    'properties',
-    (o: unknown): o is ODOProps[] => Type.isArrayOf(o, isODOProperty),
-  ],
-  ['message', Type.isString],
-  ['securityScopedBookmarks', Type.isBoolean],
-];
+const openDialogOptionTypes = {
+  title: isString,
+  defaultPath: isString,
+  buttonLabel: isString,
+  filters: chkArrayOf(isFileFilter),
+  properties: chkArrayOf(isODOProperty),
+  message: isString,
+  securityScopedBookmarks: isBoolean,
+};
 
 /**
  * Type Check for
@@ -60,7 +61,7 @@ const openDialogOptionTypes: TypeCheckPair[] = [
  * [OpenDialogOptions](https://www.electronjs.org/docs/latest/api/dialog)
  */
 export function isOpenDialogOptions(obj: unknown): obj is OpenDialogOptions {
-  return Type.isSpecificType(obj, openDialogOptionTypes);
+  return isObjectOfType<OpenDialogOptions>(obj, {}, openDialogOptionTypes);
 }
 
 /**

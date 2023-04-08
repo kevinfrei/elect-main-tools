@@ -1,4 +1,4 @@
-import { DebouncedEvery } from '@freik/core-utils';
+import { DebouncedEvery } from '@freik/sync';
 import { BrowserWindow } from 'electron';
 import { LoadWindowPos, SaveWindowPos, WindowPosition } from './persist';
 

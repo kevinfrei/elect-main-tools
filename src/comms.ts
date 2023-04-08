@@ -1,4 +1,5 @@
-import { MakeError, MakeLogger, Type } from '@freik/core-utils';
+import { is2TupleOf, isString } from '@freik/typechk/lib/esm/TypeChk';
+import debug from 'debug';
 import { ipcMain, ProtocolRequest, ProtocolResponse } from 'electron';
 import isDev from 'electron-is-dev';
 import { IpcMainInvokeEvent } from 'electron/main';
@@ -6,8 +7,8 @@ import { Persistence } from './persist';
 import { isOpenDialogOptions, ShowOpenDialog } from './shell';
 import { getMainWindow } from './win';
 
-const log = MakeLogger('emt-comms-log');
-const err = MakeError('emt-comms-err');
+const log = debug('electron-main-tools:comms:log');
+const err = debug('electron-main-tools:comms:error');
 
 /**
  * The type of a "channel handler", used by {@link registerChannel}
@@ -120,7 +121,7 @@ export function AsyncSend(message: unknown): void {
 }
 
 function isKeyValue(obj: unknown): obj is [string, string] {
-  return Type.is2TupleOf(obj, Type.isString, Type.isString);
+  return is2TupleOf(obj, isString, isString);
 }
 
 /**
@@ -131,7 +132,7 @@ export function SetupDefault(): void {
   // These are the general "just asking for something to read/written to disk"
   // functions. Media Info, Search, and MusicDB stuff needs a different handler
   // because they don't just read/write to disk.
-  registerChannel('read-from-storage', readFromStorage, Type.isString);
+  registerChannel('read-from-storage', readFromStorage, isString);
   registerChannel('write-to-storage', writeToStorage, isKeyValue);
   registerChannel('show-open-dialog', ShowOpenDialog, isOpenDialogOptions);
   registerChannel('is-dev', wwwIsDev, (a: unknown): a is void => true);
