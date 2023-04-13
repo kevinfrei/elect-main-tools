@@ -1,10 +1,10 @@
-import { is2TupleOf, isString } from '@freik/typechk/lib/esm/TypeChk';
+import { is2TupleOf, isString } from '@freik/typechk';
 import debug from 'debug';
-import { ipcMain, ProtocolRequest, ProtocolResponse } from 'electron';
+import { ProtocolRequest, ProtocolResponse, ipcMain } from 'electron';
 import isDev from 'electron-is-dev';
 import { IpcMainInvokeEvent } from 'electron/main';
 import { Persistence } from './persist';
-import { isOpenDialogOptions, ShowOpenDialog } from './shell';
+import { ShowOpenDialog, isOpenDialogOptions } from './shell';
 import { getMainWindow } from './win';
 
 const log = debug('electron-main-tools:comms:log');
