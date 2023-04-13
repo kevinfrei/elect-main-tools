@@ -1,13 +1,13 @@
-import { hasStrField } from '@freik/typechk';
 import {
   chkArrayOf,
   hasFieldType,
+  hasStrField,
   isArrayOfString,
   isBoolean,
   isObjectOfType,
   isString,
-} from '@freik/typechk/lib/esm/TypeChk';
-import { dialog, OpenDialogOptions, shell } from 'electron';
+} from '@freik/typechk';
+import { OpenDialogOptions, dialog, shell } from 'electron';
 import { getMainWindow } from './win';
 
 function isFileFilter(o: unknown): o is Electron.FileFilter {

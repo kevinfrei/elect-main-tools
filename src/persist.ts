@@ -1,12 +1,13 @@
 import { MakePersistence } from '@freik/node-utils';
-import { Pickle, Unpickle } from '@freik/typechk';
 import {
+  Pickle,
+  Unpickle,
   hasField,
   hasFieldType,
   isBoolean,
   isNumber,
-} from '@freik/typechk/lib/esm/TypeChk';
-import { app, Rectangle } from 'electron';
+} from '@freik/typechk';
+import { Rectangle, app } from 'electron';
 import path from 'path';
 
 export type MaybeRectangle = {
