@@ -7,8 +7,9 @@ import { Persistence } from './persist';
 import { ShowOpenDialog, isOpenDialogOptions } from './shell';
 import { getMainWindow } from './win';
 
-const log = debug('electron-main-tools:comms:log');
-const err = debug('electron-main-tools:comms:error');
+const log = debug('@freik/electron-main-tools:comms:log');
+const err = debug('@freik/electron-main-tools:comms:error');
+err.enabled = true;
 
 /**
  * The type of a "channel handler", used by {@link registerChannel}
